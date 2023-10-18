@@ -9,8 +9,8 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<Book, BookDto>();
-        CreateMap<BookDto, Book>();
-        CreateMap<BookInputDto, Book>();
+        CreateMap<Book, GetBookDto>();
+        CreateMap<GetBookDto, Book>();
+        CreateMap<AddBookDto, Book>();
     }
 }

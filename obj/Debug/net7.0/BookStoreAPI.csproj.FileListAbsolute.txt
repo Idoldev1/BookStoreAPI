@@ -68,3 +68,12 @@ C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\obj\Debug\net7.0\refint\BookS
 C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\obj\Debug\net7.0\BookStoreAPI.pdb
 C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\obj\Debug\net7.0\BookStoreAPI.genruntimeconfig.cache
 C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\obj\Debug\net7.0\ref\BookStoreAPI.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.AspNetCore.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+C:\Users\User\Downloads\Yinka's Files\BookStoreAPI\bin\Debug\net7.0\Serilog.Sinks.File.dll

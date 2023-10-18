@@ -3,79 +3,83 @@ using BookStoreAPI.DTOs;
 using BookStoreAPI.Exceptions;
 using BookStoreAPI.Models;
 using BookStoreAPI.Repository;
-using BookStoreAPI.Services;
-using Microsoft.Extensions.Caching.Memory;
-
+using Microsoft.AspNetCore.Mvc;
 namespace BookStoreAPI.Sevices;
 
 
-internal sealed class BookServices : IBookServices
+public class BookServices
 {
-    private readonly IRepositoryManager _bookstoreRepository;
-    private readonly IMapper mapper;
-    //private readonly ILogger logger;
+    private readonly IBookstoreRepository bookstoreRepository;
+    private readonly IMapper _mapper;
 
-    public BookServices(IRepositoryManager bookstoreRepository
-                        ,IMapper mapper)
+    public BookServices(IBookstoreRepository bookstoreRepository, IMapper mapper)
     {
-        _bookstoreRepository = bookstoreRepository;
-        this.mapper = mapper;
+        this.bookstoreRepository = bookstoreRepository;
+        _mapper = mapper;
     }
 
-    public BookDto AddBook(BookInputDto book)
+    public GetBookDto AddBook([FromBody]AddBookDto book)
     {
-        var bookEntity = mapper.Map<Book>(book);
+        //create a var to map the incoming data to the original properties in your solution
+        var addBook = bookstoreRepository.AddBook(book);
+        var newBook = _mapper.Map<GetBookDto>(addBook);
 
-        _bookstoreRepository.BookstoreRepository.AddBook(bookEntity);
-        _bookstoreRepository.Save();
-
-        var bookReturn = mapper.Map<BookDto>(bookEntity);
-
-        return bookReturn;
+        return newBook;
     }
 
-    public void DeleteBook(string Id, bool trackChanges)
+    public void Delete(int Id, bool trackChanges)
     {
-        var book = _bookstoreRepository.BookstoreRepository.GetBookId(Id, trackChanges);
+        bookstoreRepository.DeleteBook(Id, trackChanges);
+    }
 
+    public IEnumerable<GetBookDto> GetAllBook(bool trackChanges)
+    {
+        try
+        {   
+            var books = bookstoreRepository.GetAllBook(trackChanges);
+            var getAllBooks = _mapper.Map<List<GetBookDto>>(books);
+
+            return getAllBooks;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message, ex);
+        }
+    }
+
+    public GetBookDto GetBookById(int Id, bool trackChanges)
+    {
+        if (Id <= 0)
+        {
+            // Handles the case where the provided ID is invalid (e.g., less than or equal to 0)
+            throw new ArgumentException("Please input a valid Id.");
+        }
+
+        var book = bookstoreRepository.GetBookId(Id, trackChanges);
         if (book == null)
-            throw new BookNotFoundException(Id);
+        {
+            // Handles the case where the book with the provided ID does not exist
+            throw new NotFoundException("Book not found with the specified ID.");
+        }
+        var getBook = _mapper.Map<GetBookDto>(book);
 
-        _bookstoreRepository.BookstoreRepository.DeleteBook(book);
-
-        _bookstoreRepository.Save();
+        return getBook;
     }
 
-    public IEnumerable<Book> GetAllBook(bool trackChanges)
+
+    public GetBookDto GetBookByTitle(string title)
     {
-        var book = _bookstoreRepository.BookstoreRepository.GetAllBook(trackChanges);
-        var bookDto = mapper.Map<IEnumerable<Book>>(book);
+        var book = bookstoreRepository.GetBookTitle(title);
+        var bookTitle = _mapper.Map<GetBookDto>(book);
 
-        return bookDto;
+        return bookTitle;
     }
 
-    public BookDto GetBook(string Id, bool trackChanges)
+    public void UpdateBook(int Id, Book bookInputDto, bool trackChanges) 
     {
-        //logger.LogInformation("Request Made For A Book");
-
-        var book = _bookstoreRepository.BookstoreRepository.GetBookId(Id, trackChanges);
-
-        //check if the book is null
-        if (book is null)
-                throw new BookNotFoundException(Id);
-
-        var bookDto = mapper.Map<BookDto>(Id);
-        return bookDto;
+        //bookstoreRepository.UpdateBook(Id, bookInputDto, trackChanges);
+        _mapper.Map<UpdateBookDto>(bookInputDto);
+        bookstoreRepository.UpdateBook(Id, bookInputDto, trackChanges);
     }
-
-    public void UpdateBook(string Id, BookInputDto bookInputDto, bool trackChanges)
-    {
-        var book = _bookstoreRepository.BookstoreRepository.GetBookId(Id, trackChanges);
-
-        if (book == null)
-            throw new BookNotFoundException(Id);
-        
-        mapper.Map(bookInputDto, book);
-        _bookstoreRepository.Save();
-    }
+    
 }
