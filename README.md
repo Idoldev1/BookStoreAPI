@@ -1,2 +1,6 @@
 # BookStoreAPI
-Initial commit- CRUD operations for the API
+feat: Added logging with Serilog and refactored code
+
+- Integrated Serilog for logging
+- Refactored code for improved readability and maintainability
+
