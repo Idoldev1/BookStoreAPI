@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreAPI.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    [Migration("20230918064222_Initial")]
-    partial class Initial
+    [Migration("20231017042430_SecondMigration")]
+    partial class SecondMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,8 +22,9 @@ namespace BookStoreAPI.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.Book", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -60,7 +61,7 @@ namespace BookStoreAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cb620a4a-ad8a-47d1-b678-ba12f2e809cd",
+                            Id = 1,
                             Author = "F. Scott Fitzerald",
                             Category = 2,
                             Description = "",
@@ -72,7 +73,7 @@ namespace BookStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = "dca15bef-391c-4807-afd7-24c44393a454",
+                            Id = 2,
                             Author = "TMI",
                             Category = 4,
                             Description = "",
@@ -81,59 +82,31 @@ namespace BookStoreAPI.Migrations
                             Publisher = "Micheal Oliver",
                             Rating = 9.3000000000000007,
                             Title = "The Wrath of man"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Author = "Idoldev",
+                            Category = 4,
+                            Description = "",
+                            Price = 25.0,
+                            PublishDate = new DateTime(2002, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Publisher = "Micheal Oliver",
+                            Rating = 8.0,
+                            Title = "Hand of God"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Author = "F. Scott Fitzerald",
+                            Category = 0,
+                            Description = "",
+                            Price = 30.0,
+                            PublishDate = new DateTime(2007, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Publisher = "Micheal Oliver",
+                            Rating = 8.9000000000000004,
+                            Title = "The Great Gatsby"
                         });
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.OrderItem", b =>
-                {
-                    b.Property<int>("BookId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("BookId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItem");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.OrderItem", b =>
-                {
-                    b.HasOne("BookStoreAPI.Models.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

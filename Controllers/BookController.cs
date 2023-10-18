@@ -1,73 +1,78 @@
 using BookStoreAPI.DTOs;
 using BookStoreAPI.Models;
-using BookStoreAPI.Services;
+using BookStoreAPI.Sevices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreAPI.Controllers;
 
 
-[Route("api/book")]
+[Route("api/[controller]")]
 [ApiController]
 public class BookController : ControllerBase
 {
-    private readonly IServices _services;
+    private readonly BookServices _services;
 
-    public BookController(IServices services)
+    public BookController(BookServices services)
     {
         _services = services;
     }
 
 
+
     [HttpGet]
-    [ProducesResponseType(200)]
-    public IActionResult GetBooks()
+    public IActionResult GetAllBooks()
     {
-        var books = _services.BookServices.GetAllBook(trackChanges: false);
+        var books = _services.GetAllBook(trackChanges: false);
         return Ok(books);
     }
 
 
-    [HttpGet("{Id}")]
-    [ProducesResponseType(200, Type = typeof(Book))]
-    [ProducesResponseType(400)]
-    public IActionResult GetBookById(string Id)
-    {
-        var book = _services.BookServices.GetBook(Id, trackChanges: false);
-
-        return Ok(book);
-    }
-
-
     [HttpPost]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(400)]
-    public IActionResult AddBook([FromBody]BookInputDto createBook)
+    [Route("AddBook")]
+    public IActionResult AddNewBook(AddBookDto book)
     {
-        if (createBook is null)
-                return BadRequest("Invalid details for creating book");
-        var createdBook = _services.BookServices.AddBook(createBook);
+        var addBook = _services.AddBook(book);
 
-        return CreatedAtRoute("BookById", new { id = createdBook.Id }, createdBook);
-
+        return Ok(addBook);
     }
 
 
-    [HttpDelete("{id:guid}")]
-    public IActionResult DeleteBook(string bookId)
+    [HttpGet]
+    [Route("get_by_Id")]
+    public IActionResult GetABookById(int Id)
     {
-        _services.BookServices.DeleteBook(bookId, trackChanges: false);
-        
-        return NoContent();
+        var bookId = _services.GetBookById(Id, trackChanges: false);
+
+        return Ok(bookId);
     }
 
 
-    [HttpPut("{id:guid}")]
-    public IActionResult UpdateBook(string Id, [FromBody] BookInputDto book)
+    [HttpGet]
+    [Route("get_by_title")]
+    public IActionResult GetABookByTitle(string title)
     {
-        if (book is null)
-                return BadRequest("Detail requested for doesn't exist");
-        _services.BookServices.UpdateBook(Id, book, trackChanges : false);
+        var titleBook = _services.GetBookByTitle(title);
 
-        return NoContent();
+        return Ok(titleBook);
+    }
+
+
+    [HttpDelete]
+    [Route("deleteBook")]
+    public IActionResult DeleteBook(int Id, bool trackChanges)
+    {
+        _services.Delete(Id, trackChanges: false);
+
+        return Ok();
+    }
+
+
+    [HttpPut]
+    [Route("updateBook")]
+    public IActionResult UpdateBook(int Id, Book bookInputDto, bool trackChanges)
+    {
+        _services.UpdateBook(Id, bookInputDto, trackChanges: false);
+
+        return Ok();
     }
 }

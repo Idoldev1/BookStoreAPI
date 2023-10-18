@@ -1,9 +1,9 @@
 namespace BookStoreAPI.Exceptions;
 
 
-public abstract class NotFoundException : Exception
+public class NotFoundException : Exception
 {
-    protected NotFoundException(string message) : base(message)
+    public NotFoundException(string message) : base(message)
     {
         
     }
